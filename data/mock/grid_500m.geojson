@@ -1,0 +1,100 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_id": "grid_001",
+        "pop_density": 8500,
+        "area_sqm": 250000,
+        "ward": "Shibuya"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.695, 35.655],
+          [139.705, 35.655],
+          [139.705, 35.665],
+          [139.695, 35.665],
+          [139.695, 35.655]
+        ]]
+      }
+    },
+    {
+      "type": "Feature", 
+      "properties": {
+        "grid_id": "grid_002",
+        "pop_density": 12000,
+        "area_sqm": 250000,
+        "ward": "Shibuya"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.705, 35.655],
+          [139.715, 35.655],
+          [139.715, 35.665],
+          [139.705, 35.665],
+          [139.705, 35.655]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_id": "grid_003", 
+        "pop_density": 6800,
+        "area_sqm": 250000,
+        "ward": "Shinjuku"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.685, 35.685],
+          [139.695, 35.685],
+          [139.695, 35.695],
+          [139.685, 35.695],
+          [139.685, 35.685]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_id": "grid_004",
+        "pop_density": 15200,
+        "area_sqm": 250000, 
+        "ward": "Chiyoda"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.750, 35.690],
+          [139.760, 35.690],
+          [139.760, 35.700],
+          [139.750, 35.700],
+          [139.750, 35.690]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "grid_id": "grid_005",
+        "pop_density": 9500,
+        "area_sqm": 250000,
+        "ward": "Minato"
+      },
+      "geometry": {
+        "type": "Polygon", 
+        "coordinates": [[
+          [139.745, 35.650],
+          [139.755, 35.650],
+          [139.755, 35.660],
+          [139.745, 35.660],
+          [139.745, 35.650]
+        ]]
+      }
+    }
+  ]
+}

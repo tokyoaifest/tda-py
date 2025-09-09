@@ -1,0 +1,16 @@
+{
+  "weights": {
+    "population_density": 0.25,
+    "residential_unit_count": 0.20,
+    "building_stories": 0.15,
+    "hazard_liquefaction_rank": 0.25,
+    "flood_depth": 0.10,
+    "proximity_to_shelter": -0.05
+  },
+  "bands": {
+    "low": [0, 0.33],
+    "medium": [0.33, 0.67],
+    "high": [0.67, 1.0]
+  },
+  "description": "Entrapment risk calculation weights and band thresholds"
+}

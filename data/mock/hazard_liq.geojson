@@ -1,0 +1,81 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "hazard_id": "liq_001",
+        "liq_rank": 3,
+        "risk_level": "medium",
+        "description": "Moderate liquefaction potential"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.690, 35.650],
+          [139.720, 35.650],
+          [139.720, 35.670],
+          [139.690, 35.670],
+          [139.690, 35.650]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "hazard_id": "liq_002",
+        "liq_rank": 5,
+        "risk_level": "high",
+        "description": "High liquefaction potential"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.680, 35.680],
+          [139.700, 35.680],
+          [139.700, 35.700],
+          [139.680, 35.700],
+          [139.680, 35.680]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "hazard_id": "liq_003",
+        "liq_rank": 2,
+        "risk_level": "low",
+        "description": "Low liquefaction potential"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.740, 35.685],
+          [139.765, 35.685],
+          [139.765, 35.705],
+          [139.740, 35.705],
+          [139.740, 35.685]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "hazard_id": "liq_004",
+        "liq_rank": 4,
+        "risk_level": "high",
+        "description": "High liquefaction potential"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.740, 35.645],
+          [139.760, 35.645],
+          [139.760, 35.665],
+          [139.740, 35.665],
+          [139.740, 35.645]
+        ]]
+      }
+    }
+  ]
+}

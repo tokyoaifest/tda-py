@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokyo Disaster Entrapment Risk</title>
+    <link rel="manifest" href="manifest.json">
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .controls h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .toggle-group {
+            margin-bottom: 15px;
+        }
+        
+        .toggle-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .toggle-group input {
+            margin-right: 8px;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .legend h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+        
+        .risk-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 350px;
+            display: none;
+        }
+        
+        .risk-info.active {
+            display: block;
+        }
+        
+        .risk-score {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .risk-band {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .risk-band.low { background-color: #28a745; }
+        .risk-band.medium { background-color: #fd7e14; }
+        .risk-band.high { background-color: #dc3545; }
+        
+        .contributors {
+            font-size: 12px;
+        }
+        
+        .contributors h5 {
+            margin: 0 0 5px 0;
+            font-size: 13px;
+        }
+        
+        .contributor-item {
+            margin-bottom: 3px;
+            color: #666;
+        }
+        
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .click-instruction {
+            position: absolute;
+            bottom: 100px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div class="controls">
+        <h3>🏙️ Tokyo Disaster Risk</h3>
+        <div class="toggle-group">
+            <label>
+                <input type="radio" name="mode" value="local" checked>
+                Local Mode
+            </label>
+            <label>
+                <input type="radio" name="mode" value="postgis">
+                Database Mode
+            </label>
+        </div>
+        <div class="toggle-group">
+            <label>
+                <input type="checkbox" id="show-buildings" checked>
+                Show Buildings
+            </label>
+            <label>
+                <input type="checkbox" id="show-hazards" checked>
+                Show Hazards
+            </label>
+        </div>
+    </div>
+    
+    <div class="legend">
+        <h4>Risk Level</h4>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #28a745;"></div>
+            <span>Low Risk</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #fd7e14;"></div>
+            <span>Medium Risk</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #dc3545;"></div>
+            <span>High Risk</span>
+        </div>
+    </div>
+    
+    <div class="click-instruction">
+        Click on the map to get risk assessment
+    </div>
+    
+    <div class="risk-info" id="risk-info">
+        <div class="loading">Loading risk assessment...</div>
+    </div>
+    
+    <script>
+        // Initialize map
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: {
+                version: 8,
+                sources: {
+                    'osm': {
+                        type: 'raster',
+                        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: '© OpenStreetMap contributors'
+                    }
+                },
+                layers: [{
+                    id: 'osm',
+                    type: 'raster',
+                    source: 'osm'
+                }]
+            },
+            center: [139.7016, 35.6762], // Tokyo center
+            zoom: 12
+        });
+        
+        let currentMode = 'local';
+        
+        // Load mock data and add to map
+        map.on('load', function() {
+            loadMockData();
+            setupEventListeners();
+        });
+        
+        async function loadMockData() {
+            try {
+                // Load grid data
+                const gridResponse = await fetch('/data/mock/grid_500m.geojson');
+                const gridData = await gridResponse.json();
+                
+                map.addSource('grid', {
+                    type: 'geojson',
+                    data: gridData
+                });
+                
+                map.addLayer({
+                    id: 'grid-fill',
+                    type: 'fill',
+                    source: 'grid',
+                    paint: {
+                        'fill-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'pop_density'],
+                            0, '#28a745',
+                            8000, '#fd7e14', 
+                            15000, '#dc3545'
+                        ],
+                        'fill-opacity': 0.6
+                    }
+                });
+                
+                map.addLayer({
+                    id: 'grid-stroke',
+                    type: 'line',
+                    source: 'grid',
+                    paint: {
+                        'line-color': '#fff',
+                        'line-width': 1
+                    }
+                });
+                
+                // Load buildings data
+                const buildingsResponse = await fetch('/data/mock/buildings.geojson');
+                const buildingsData = await buildingsResponse.json();
+                
+                map.addSource('buildings', {
+                    type: 'geojson',
+                    data: buildingsData
+                });
+                
+                map.addLayer({
+                    id: 'buildings',
+                    type: 'fill',
+                    source: 'buildings',
+                    paint: {
+                        'fill-color': [
+                            'match',
+                            ['get', 'use'],
+                            'residential', '#4CAF50',
+                            'office', '#2196F3',
+                            'mixed', '#FF9800',
+                            '#9E9E9E'
+                        ],
+                        'fill-opacity': 0.8
+                    }
+                });
+                
+                // Load hazards data
+                const hazardsResponse = await fetch('/data/mock/hazard_liq.geojson');
+                const hazardsData = await hazardsResponse.json();
+                
+                map.addSource('hazards', {
+                    type: 'geojson',
+                    data: hazardsData
+                });
+                
+                map.addLayer({
+                    id: 'hazards',
+                    type: 'fill',
+                    source: 'hazards',
+                    paint: {
+                        'fill-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'liq_rank'],
+                            1, '#ffeb3b',
+                            3, '#ff9800',
+                            5, '#f44336'
+                        ],
+                        'fill-opacity': 0.4
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading mock data:', error);
+            }
+        }
+        
+        function setupEventListeners() {
+            // Map click handler
+            map.on('click', async function(e) {
+                const { lng, lat } = e.lngLat;
+                await getRiskScore(lat, lng);
+            });
+            
+            // Mode toggle
+            document.querySelectorAll('input[name="mode"]').forEach(radio => {
+                radio.addEventListener('change', function(e) {
+                    currentMode = e.target.value;
+                    console.log('Mode changed to:', currentMode);
+                });
+            });
+            
+            // Layer toggles
+            document.getElementById('show-buildings').addEventListener('change', function(e) {
+                const visibility = e.target.checked ? 'visible' : 'none';
+                map.setLayoutProperty('buildings', 'visibility', visibility);
+            });
+            
+            document.getElementById('show-hazards').addEventListener('change', function(e) {
+                const visibility = e.target.checked ? 'visible' : 'none';
+                map.setLayoutProperty('hazards', 'visibility', visibility);
+            });
+        }
+        
+        async function getRiskScore(lat, lon) {
+            const riskInfo = document.getElementById('risk-info');
+            riskInfo.className = 'risk-info active';
+            riskInfo.innerHTML = '<div class="loading">Loading risk assessment...</div>';
+            
+            try {
+                const response = await fetch(`/risk/score?lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+                
+                displayRiskInfo(data);
+            } catch (error) {
+                console.error('Error fetching risk score:', error);
+                riskInfo.innerHTML = '<div style="color: red;">Error loading risk data</div>';
+            }
+        }
+        
+        function displayRiskInfo(data) {
+            const riskInfo = document.getElementById('risk-info');
+            
+            const contributorsHtml = data.top_contributors
+                .map(contrib => `<div class="contributor-item">${contrib.description}</div>`)
+                .join('');
+            
+            riskInfo.innerHTML = `
+                <div class="risk-score">${(data.risk_score * 100).toFixed(1)}%</div>
+                <div class="risk-band ${data.band}">${data.band.toUpperCase()}</div>
+                <div>
+                    <strong>Location:</strong> ${data.lat.toFixed(4)}, ${data.lon.toFixed(4)}
+                </div>
+                <div class="contributors">
+                    <h5>Key Risk Factors:</h5>
+                    ${contributorsHtml}
+                </div>
+            `;
+        }
+        
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered successfully:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>

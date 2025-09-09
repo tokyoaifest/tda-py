@@ -1,0 +1,152 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_001",
+        "levels": 12,
+        "height": 36,
+        "use": "residential",
+        "year_built": 1985,
+        "units": 48
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.698, 35.658],
+          [139.699, 35.658],
+          [139.699, 35.659],
+          [139.698, 35.659],
+          [139.698, 35.658]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_002",
+        "levels": 8,
+        "height": 24,
+        "use": "residential", 
+        "year_built": 1992,
+        "units": 32
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.701, 35.660],
+          [139.702, 35.660],
+          [139.702, 35.661],
+          [139.701, 35.661],
+          [139.701, 35.660]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_003",
+        "levels": 25,
+        "height": 75,
+        "use": "office",
+        "year_built": 2005,
+        "units": 0
+      },
+      "geometry": {
+        "type": "Polygon", 
+        "coordinates": [[
+          [139.708, 35.662],
+          [139.710, 35.662],
+          [139.710, 35.664],
+          [139.708, 35.664],
+          [139.708, 35.662]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_004",
+        "levels": 6,
+        "height": 18,
+        "use": "residential",
+        "year_built": 1978,
+        "units": 24
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.690, 35.688],
+          [139.691, 35.688],
+          [139.691, 35.689],
+          [139.690, 35.689],
+          [139.690, 35.688]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_005",
+        "levels": 35,
+        "height": 105,
+        "use": "mixed",
+        "year_built": 2010,
+        "units": 120
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.752, 35.692],
+          [139.754, 35.692], 
+          [139.754, 35.694],
+          [139.752, 35.694],
+          [139.752, 35.692]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_006",
+        "levels": 15,
+        "height": 45,
+        "use": "residential",
+        "year_built": 1995,
+        "units": 60
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.748, 35.652],
+          [139.749, 35.652],
+          [139.749, 35.653],
+          [139.748, 35.653],
+          [139.748, 35.652]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "bldg_007",
+        "levels": 4,
+        "height": 12,
+        "use": "residential",
+        "year_built": 1970,
+        "units": 16
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [139.700, 35.657],
+          [139.701, 35.657],
+          [139.701, 35.658],
+          [139.700, 35.658],
+          [139.700, 35.657]
+        ]]
+      }
+    }
+  ]
+}

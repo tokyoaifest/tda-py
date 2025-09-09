@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokyo-disaster-anticipation"
+version = "0.1.0"
+description = "Tokyo Disaster Entrapment Anticipation MVP"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.0.0",
+    "shapely>=2.0.0",
+    "pyproj>=3.6.0",
+    "geopandas>=0.14.0",
+    "pyogrio>=0.7.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "pmtiles>=3.0.0",
+    "rangehttpserver>=1.3.0",
+    "mercantile>=1.2.1",
+    "mapbox-vector-tile>=2.0.1",
+    "pytest>=7.4.0",
+    "httpx>=0.25.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["-v", "--tb=short"]
+filterwarnings = [
+    "ignore::UserWarning"
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
